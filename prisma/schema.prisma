@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  editor
+  author
+  reader
+}
+
+enum Status {
+  draft
+  published
+  archived
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(reader)
+  posts     Post[]   // Relasi ke post
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model Post {
+  id          Int        @id @default(autoincrement())
+  title       String
+  slug        String      @unique
+  content     String
+  thumbnail   String?
+  status      Status      @default(draft)
+  authorId    Int
+  categoryId  Int?
+  author      User        @relation(fields: [authorId], references: [id])
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String    @unique
+  posts     Post[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+}
