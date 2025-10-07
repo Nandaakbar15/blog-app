@@ -117,8 +117,8 @@ export default function Sidebar() {
 
             {/* Inbox Link */}
             <li>
-              <a
-                href="#"
+              <Link
+                href="/admin/categories"
                 className="flex items-center p-3 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition duration-150"
               >
                 {/* Inbox SVG */}
@@ -134,13 +134,13 @@ export default function Sidebar() {
                 <span className="flex-1 ms-3 whitespace-nowrap">
                   Data Category
                 </span>
-              </a>
+              </Link>
             </li>
 
             {/* Users Link */}
             <li>
-              <a
-                href="#"
+              <Link
+                href="/admin/users"
                 className="flex items-center p-3 text-gray-900 rounded-xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group transition duration-150"
               >
                 {/* Users SVG */}
@@ -156,7 +156,7 @@ export default function Sidebar() {
                 <span className="flex-1 ms-3 whitespace-nowrap">
                   Data Users
                 </span>
-              </a>
+              </Link>
             </li>
             {/* Divider */}
             <li className="my-4">
