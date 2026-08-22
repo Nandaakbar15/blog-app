@@ -82,10 +82,10 @@ export default function UsersDataPages() {
                         <TableCell className="px-4 py-2">
                           <div className="flex items-center gap-2 space-x-2">
                             <Link
-                              href={`/admin/data-produk/ubah-produk/${user.id}`}
+                              href={`/admin/users/edit-password/${user.id}`}
                               className="bg-blue-500 inline-block rounded-lg shadow-lg text-white px-4 py-2 hover:bg-blue-700"
                             >
-                              Edit
+                              Reset Password
                             </Link>
                             <button className="inline-block bg-red-500 px-4 py-2 text-white rounded-lg shadow-lg hover:bg-red-700">
                               Delete

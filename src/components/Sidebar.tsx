@@ -74,8 +74,8 @@ export default function Sidebar() {
           <ul className="space-y-2 font-medium">
             {/* Dashboard Link (Active State) */}
             <li>
-              <a
-                href="#"
+              <Link
+                href="/admin"
                 className="flex items-center p-3 text-gray-900 rounded-xl dark:text-white hover:bg-blue-100 dark:hover:bg-gray-700 group transition duration-150 bg-blue-50/70 dark:bg-gray-700/50 shadow-md"
               >
                 {/* Dashboard SVG */}
@@ -92,7 +92,7 @@ export default function Sidebar() {
                 <span className="ms-3 text-blue-700 dark:text-blue-400">
                   Dashboard
                 </span>
-              </a>
+              </Link>
             </li>
 
             {/* Kanban Link */}
