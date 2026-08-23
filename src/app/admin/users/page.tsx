@@ -18,11 +18,20 @@ import { useEffect, useState } from "react";
 export default function UsersDataPages() {
   const [users, setUsers] = useState<User[]>([]);
 
-  const getUsers = async () => {
+  const [paginations, setPaginations] = useState({
+    current_page: 1,
+    last_page: 1,
+  });
+
+  const getUsers = async (page: number = 1) => {
     try {
-      const response = await axios.get("/api/user");
+      const response = await axios.get(`/api/user?page=${page}`);
 
       setUsers(response.data.data);
+      setPaginations({
+        current_page: response.data.meta.page,
+        last_page: response.data.meta.last_page,
+      });
     } catch (error) {
       console.error("Error : ", error);
     }
@@ -70,16 +79,16 @@ export default function UsersDataPages() {
                   <TableBody>
                     {users.map((user) => (
                       <TableRow key={user.id}>
-                        <TableCell className="font-medium px-4 py-2">
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
                           {user.name}
                         </TableCell>
-                        <TableCell className="font-medium px-4 py-2">
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
                           {user.email}
                         </TableCell>
-                        <TableCell className="font-medium px-4 py-2">
+                        <TableCell className="font-medium px-4 py-2 border border-gray-300">
                           {user.role}
                         </TableCell>
-                        <TableCell className="px-4 py-2">
+                        <TableCell className="space-x-2 px-4 py-2 border border-gray-300">
                           <div className="flex items-center gap-2 space-x-2">
                             <Link
                               href={`/admin/users/edit-password/${user.id}`}
@@ -96,6 +105,29 @@ export default function UsersDataPages() {
                     ))}
                   </TableBody>
                 </Table>
+                {/* Paginations */}
+                <div className="flex justify-center items-center mt-6 space-x-2">
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={paginations.current_page === 1}
+                    onClick={() => getUsers(paginations.current_page - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    Pages {paginations.current_page} from{" "}
+                    {paginations.last_page}
+                  </span>
+                  <button
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={
+                      paginations.current_page === paginations.last_page
+                    }
+                    onClick={() => getUsers(paginations.current_page + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
               </CardContent>
             </Card>
           </div>
