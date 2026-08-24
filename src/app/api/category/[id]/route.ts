@@ -1,8 +1,9 @@
 import {
   getCategoryById,
   updateCategory,
+  deleteCategory,
 } from "@/app/lib/controller/categoryController";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
@@ -25,10 +26,19 @@ export async function GET(
 }
 
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
   const { id } = await context.params;
 
   return await updateCategory(req, parseInt(id));
+}
+
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { id } = await context.params;
+
+  return await deleteCategory(req, parseInt(id));
 }

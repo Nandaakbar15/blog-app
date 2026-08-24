@@ -133,7 +133,7 @@ export default function PostPages() {
                         </TableCell>
                         <TableCell className="space-x-2 border border-gray-300 px-4 py-2">
                           <Link
-                            href={`/admin/posts/${data.id}`}
+                            href={`/admin/posts/edit-posts/${data.id}`}
                             className="inline-block text-white rounded-lg shadow-lg px-4 py-2 bg-blue-500 hover:bg-blue-700"
                           >
                             Edit

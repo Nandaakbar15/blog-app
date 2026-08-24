@@ -44,17 +44,12 @@ export async function getAllPosts(req: NextRequest) {
 
 export async function getPostById(id: number) {
   try {
-    const post = await prisma.post.findUnique({
-      where: { id },
+    return await prisma.post.findUnique({
+      where: { id: id },
       include: {
         author: true,
         category: true,
       },
-    });
-
-    return NextResponse.json({
-      statusCode: 200,
-      data: post,
     });
   } catch (error) {
     console.error("Error : ", error);
@@ -119,5 +114,77 @@ export async function addNewPost(req: NextRequest) {
       statusCode: 500,
       message: "Error! Could not add new post.",
     });
+  }
+}
+
+export async function updatePost(req: Request, id: number) {
+  try {
+    const formData = await req.formData();
+
+    const title = formData.get("title") as string;
+    const slug = formData.get("slug") as string;
+    const content = formData.get("content") as string;
+    const status = (formData.get("status") as Status) || Status.draft;
+    const authorId = formData.get("authorId") as string;
+    const categoryId = formData.get("categoryId") as string;
+
+    const file = formData.get("thumbnail") as File | null;
+    let filename: string | null = null;
+
+    if (file && file.size > 0) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      // Simpan file ke direktori /public/uploads
+      filename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+      const uploadDir = path.join(process.cwd(), "public", "uploads", filename);
+
+      await writeFile(uploadDir, buffer);
+    }
+
+    const post = await prisma.post.update({
+      where: { id: id },
+      data: {
+        title,
+        slug,
+        content,
+        status,
+        author: {
+          connect: { id: parseInt(authorId) },
+        },
+        category: {
+          connect: { id: parseInt(categoryId) },
+        },
+        ...(file && { image: file }),
+      },
+    });
+
+    return NextResponse.json({
+      statusCode: 201,
+      message: "Successfully update the data!",
+      data: post,
+    });
+  } catch (error) {
+    console.error("Error : ", error);
+
+    return NextResponse.json({
+      statusCode: 500,
+      message: "Error, could not update the data!",
+    });
+  }
+}
+
+export async function deletePost(req: Request, id: number) {
+  try {
+    await prisma.post.delete({
+      where: { id: id },
+    });
+
+    return NextResponse.json({
+      statusCode: 200,
+      message: "Successfully delete the data!",
+    });
+  } catch (error) {
+    console.error("Error : ", error);
   }
 }

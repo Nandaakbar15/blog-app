@@ -104,3 +104,23 @@ export async function updateCategory(req: NextRequest, id: number) {
     });
   }
 }
+
+export async function deleteCategory(req: NextRequest, id: number) {
+  try {
+    await prisma.category.delete({
+      where: { id: id },
+    });
+
+    return NextResponse.json({
+      statusCode: 200,
+      message: "Successfully delete the data!",
+    });
+  } catch (error) {
+    console.error("Error : ", error);
+
+    return NextResponse.json({
+      statusCode: 200,
+      message: "Error, failed to delete the data!",
+    });
+  }
+}
